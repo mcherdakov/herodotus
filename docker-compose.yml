@@ -1,0 +1,21 @@
+version: '3'
+services:
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_DB=herodotus
+      - POSTGRES_USER=herodotus
+      - POSTGRES_PASSWORD=herodotus
+    logging:
+      driver: none
+  app:
+    build:
+      context: app/
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    command: bash -c "uvicorn main:app --reload --host 0.0.0.0"
+    volumes:
+      - ./app:/app/
+    depends_on:
+      - db

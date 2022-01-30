@@ -1,0 +1,29 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+fastapi = "*"
+uvicorn = "*"
+python-multipart = "*"
+asyncpg = "*"
+yoyo-migrations = "*"
+psycopg2-binary = "*"
+passlib = {extras = ["bcrypt"], version = "*"}
+python-jose = "*"
+python-dotenv = "*"
+httpx = "*"
+
+[dev-packages]
+black = "*"
+isort = "*"
+pytest = "*"
+requests = "*"
+httpx = "*"
+
+[requires]
+python_version = "3.10"
+
+[pipenv]
+allow_prereleases = true

@@ -1,0 +1,21 @@
+version: '3'
+services:
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_DB=herodotus
+      - POSTGRES_USER=herodotus
+      - POSTGRES_PASSWORD=herodotus
+    logging:
+      driver: none
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: bash -c "PYTHONPATH=../$PWD python migrator.py -a && python -m pytest tests/"
+    environment:
+      - POSTGRES_DSN=postgresql://herodotus:herodotus@db/herodotus
+    volumes:
+      - .:/app/
+    depends_on:
+      - db
