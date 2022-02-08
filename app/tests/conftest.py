@@ -43,7 +43,8 @@ def setup_db_runner():
 async def db():
     db = Database()
     await db.create_pool()
-    return db
+    yield db
+    await db.close()
 
 
 @pytest.fixture()

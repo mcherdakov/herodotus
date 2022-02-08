@@ -14,6 +14,7 @@ passlib = {extras = ["bcrypt"], version = "*"}
 python-jose = "*"
 python-dotenv = "*"
 httpx = "*"
+pydantic = {extras = ["email"], version = "*"}
 
 [dev-packages]
 black = "*"

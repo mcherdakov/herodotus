@@ -37,11 +37,11 @@ async def get_project_by_uuid(conn: asyncpg.Connection, uuid: UUID) -> Project |
 
 
 async def get_project_access(
-    conn: asyncpg.Connection, project: Project, user: User
+    conn: asyncpg.Connection, project_uuid: UUID, user: User
 ) -> ProjectAccessDB | None:
     raw_access: asyncpg.Record = await conn.fetchrow(
         "SELECT * FROM project_access WHERE project_uuid = $1 AND user_uuid = $2",
-        project.uuid,
+        project_uuid,
         user.uuid,
     )
     if raw_access is None:

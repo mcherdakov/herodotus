@@ -25,7 +25,7 @@ async def test_insert_project(
     assert project_db is not None
     assert project_db.dict() == project.dict()
 
-    project_access = await get_project_access(db_conn, project, user)
+    project_access = await get_project_access(db_conn, project.uuid, user)
     assert project_access is not None
     assert project_access.user_uuid == user.uuid
     assert project_access.project_uuid == project.uuid
