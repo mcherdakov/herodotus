@@ -81,20 +81,19 @@ async def get_current_user(
     return User(username=user.username, uuid=user.uuid)
 
 
-@router.post("/register/", status_code=status.HTTP_201_CREATED)
+@router.post("/register/", response_model=User)
 async def register(
     user: UserIn,
     conn: asyncpg.Connection = Depends(get_db_connection),
 ):
+    user_in_db = UserInDB(
+        uuid=uuid4(),
+        username=user.username,
+        password_hash=pwd_context.hash(user.password),
+    )
+
     try:
-        await insert_user(
-            conn,
-            UserInDB(
-                uuid=uuid4(),
-                username=user.username,
-                password_hash=pwd_context.hash(user.password),
-            ),
-        )
+        await insert_user(conn, user_in_db)
     except asyncpg.UniqueViolationError:
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
@@ -103,6 +102,8 @@ async def register(
                 "message": "User with this username aleready exists",
             },
         )
+
+    return User(**user.dict(), uuid=user_in_db.uuid)
 
 
 @router.post("/token/", response_model=Token)

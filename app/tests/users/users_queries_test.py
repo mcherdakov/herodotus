@@ -1,4 +1,3 @@
-from multiprocessing.connection import Connection
 from uuid import uuid4
 
 import asyncpg

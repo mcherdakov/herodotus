@@ -3,6 +3,7 @@ from fastapi import FastAPI, Request
 from app.db import Database
 from auth.api import router as auth_router
 from users.api import router as users_router
+from projects.api import router as projects_router
 
 
 def create_app(use_db: Database | None = None):
@@ -11,6 +12,7 @@ def create_app(use_db: Database | None = None):
 
     app.include_router(auth_router)
     app.include_router(users_router)
+    app.include_router(projects_router)
 
     @app.middleware("http")
     async def db_pool_middleware(request: Request, next):

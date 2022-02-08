@@ -1,8 +1,7 @@
-from uuid import uuid4
-
 import asyncpg
+from app.projects.models import Project
 
-from app.users.models import UserInDB
+from app.users.models import UserInDB, User
 
 
 async def insert_user(conn: asyncpg.Connection, user: UserInDB):

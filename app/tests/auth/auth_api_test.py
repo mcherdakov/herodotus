@@ -7,8 +7,14 @@ from fastapi import HTTPException, status
 from httpx import AsyncClient
 from jose import jwt
 
-from app.auth.api import (TokenData, authenticate_user, create_access_token,
-                          get_current_user, pwd_context, verify_password)
+from app.auth.api import (
+    TokenData,
+    authenticate_user,
+    create_access_token,
+    get_current_user,
+    pwd_context,
+    verify_password,
+)
 from app.settings import settings
 from app.users.models import UserInDB
 from app.users.queries import get_user_by_username, insert_user
@@ -105,12 +111,15 @@ async def test_register(client: AsyncClient, db_conn: asyncpg.Connection):
     response = await client.post(
         "/auth/register/", json={"username": "test", "password": "test"}
     )
-    assert response.status_code == status.HTTP_201_CREATED
+    assert response.status_code == status.HTTP_200_OK
+    response_body = response.json()
+    assert response_body["username"] == "test"
 
     user = await get_user_by_username(db_conn, "test")
     assert user is not None
     assert user.username == "test"
     assert verify_password("test", user.password_hash)
+    assert response_body["uuid"] == str(user.uuid)
 
 
 @pytest.mark.anyio
