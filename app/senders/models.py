@@ -14,3 +14,9 @@ class EmailConfIn(EmailConfBase):
 
 class EmailConfInDb(EmailConfIn):
     uuid: UUID
+
+
+class Message(BaseModel):
+    project_uuid: UUID
+    title: str
+    text: str

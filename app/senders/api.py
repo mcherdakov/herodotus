@@ -2,8 +2,9 @@ from uuid import UUID, uuid4
 import asyncpg
 from fastapi import APIRouter, Depends, HTTPException, status
 from app.projects.models import AccessType
+from app.senders.email import send_emails
 
-from app.senders.models import EmailConfIn, EmailConfInDb
+from app.senders.models import EmailConfIn, EmailConfInDb, Message
 from app.db import get_db_connection
 from app.auth.api import get_current_user
 from app.senders.queries import insert_email_conf, get_project_confs
@@ -54,3 +55,22 @@ async def create_email_conf(
     await insert_email_conf(conn, email_conf_db)
 
     return email_conf_db
+
+
+@router.post("/send/")
+async def send(
+    message: Message,
+    current_user: User = Depends(get_current_user),
+    conn: asyncpg.Connection = Depends(get_db_connection),
+):
+    await check_project_permissions(conn, current_user, message.project_uuid)
+
+    project_confs = await get_project_confs(conn, message.project_uuid)
+    emails = []
+    for project_conf in project_confs:
+        if isinstance(project_conf, EmailConfInDb):
+            emails.append(project_conf.email)
+
+    await send_emails(emails, message)
+
+    return {"message": "success"}

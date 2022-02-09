@@ -15,6 +15,7 @@ python-jose = "*"
 python-dotenv = "*"
 httpx = "*"
 pydantic = {extras = ["email"], version = "*"}
+fastapi-mail = "*"
 
 [dev-packages]
 black = "*"
