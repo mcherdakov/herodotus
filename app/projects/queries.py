@@ -1,8 +1,8 @@
 from uuid import UUID, uuid4
+
 import asyncpg
 
-
-from app.projects.models import Project, AccessType, ProjectAccess, ProjectAccessDB
+from app.projects.models import AccessType, Project, ProjectAccessDB
 from app.users.models import User
 
 

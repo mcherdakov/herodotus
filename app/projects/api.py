@@ -1,12 +1,13 @@
 from uuid import uuid4
+
 import asyncpg
 from fastapi import APIRouter, Depends
 
-from app.db import get_db_connection
 from app.auth.api import get_current_user
+from app.db import get_db_connection
+from app.projects.models import Project, ProjectIn
+from app.projects.queries import get_projects_for_user, insert_project
 from app.users.models import User
-from app.projects.models import ProjectIn, Project
-from app.projects.queries import insert_project, get_projects_for_user
 
 router = APIRouter(
     prefix="/projects",

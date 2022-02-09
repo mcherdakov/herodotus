@@ -2,9 +2,9 @@ from fastapi import FastAPI, Request
 
 from app.db import Database
 from auth.api import router as auth_router
-from users.api import router as users_router
 from projects.api import router as projects_router
 from senders.api import router as senders_router
+from users.api import router as users_router
 
 
 def create_app(use_db: Database | None = None):

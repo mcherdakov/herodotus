@@ -18,6 +18,8 @@ class Settings(BaseSettings):
     mail_use_credentials: bool = True
     mail_validatae_certs: bool = True
 
+    telegram_token: str = ""
+
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"
@@ -27,6 +29,7 @@ class Settings(BaseSettings):
             "pg_dsn": {"env": "POSTGRES_DSN"},
             "mail_username": {"env": "MAIL_USERNAME"},
             "mail_password": {"env": "MAIL_PASSWORD"},
+            "telegram_token": {"env": "TELEGRAM_TOKEN"},
         }
 
 

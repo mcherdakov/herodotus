@@ -1,15 +1,15 @@
 from uuid import uuid4
-import asyncpg
-from pydantic import EmailStr
 
+import asyncpg
 import pytest
 from fastapi import status
-from app.senders.models import EmailConfIn, EmailConfInDb
-from app.senders.queries import get_email_conf, insert_email_conf
+from pydantic import EmailStr
 
-from app.tests.conftest import AuthClient
 from app.projects.models import Project
 from app.projects.queries import insert_project
+from app.senders.models import EmailConfIn, EmailConfInDb
+from app.senders.queries import get_email_conf, insert_email_conf
+from app.tests.conftest import AuthClient
 from app.users.models import User
 
 

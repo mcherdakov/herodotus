@@ -1,12 +1,14 @@
 from uuid import uuid4
+
 import asyncpg
 import pytest
 from fastapi import status
 
+from app.projects.models import Project, ProjectIn
+from app.projects.queries import (get_project_access, get_project_by_uuid,
+                                  insert_project)
 from app.tests.conftest import AuthClient
 from app.users.models import User
-from app.projects.models import ProjectIn, Project
-from app.projects.queries import get_project_by_uuid, get_project_access, insert_project
 
 
 @pytest.mark.anyio

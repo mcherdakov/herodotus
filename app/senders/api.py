@@ -1,16 +1,19 @@
 from uuid import UUID, uuid4
+
 import asyncpg
 from fastapi import APIRouter, Depends, HTTPException, status
-from app.projects.models import AccessType
-from app.senders.email import send_emails
 
-from app.senders.models import EmailConfIn, EmailConfInDb, Message
-from app.db import get_db_connection
 from app.auth.api import get_current_user
-from app.senders.queries import insert_email_conf, get_project_confs
-from app.users.models import User
+from app.db import get_db_connection
+from app.projects.models import AccessType
 from app.projects.queries import get_project_access
-
+from app.senders.email import send_emails
+from app.senders.models import (EmailConfIn, EmailConfInDb, Message,
+                                TelegramConfIn, TelegramConfInDb)
+from app.senders.queries import (get_project_confs, insert_email_conf,
+                                 insert_telegram_conf)
+from app.senders.telegram import send_telegram
+from app.users.models import User
 
 router = APIRouter(
     prefix="/senders",
@@ -32,7 +35,7 @@ async def check_project_permissions(
         )
 
 
-@router.get("/", response_model=list[EmailConfInDb])
+@router.get("/", response_model=list[EmailConfInDb | TelegramConfInDb])
 async def list(
     project_uuid: UUID,
     current_user: User = Depends(get_current_user),
@@ -57,6 +60,21 @@ async def create_email_conf(
     return email_conf_db
 
 
+@router.post("/telegram/", response_model=TelegramConfInDb)
+async def create_telegram_conf(
+    conf: TelegramConfIn,
+    current_user: User = Depends(get_current_user),
+    conn: asyncpg.Connection = Depends(get_db_connection),
+):
+    await check_project_permissions(conn, current_user, conf.project_uuid)
+    telegram_conf_db = TelegramConfInDb(
+        uuid=uuid4(), project_uuid=conf.project_uuid, chat_id=conf.chat_id
+    )
+    await insert_telegram_conf(conn, telegram_conf_db)
+
+    return telegram_conf_db
+
+
 @router.post("/send/")
 async def send(
     message: Message,
@@ -67,10 +85,14 @@ async def send(
 
     project_confs = await get_project_confs(conn, message.project_uuid)
     emails = []
+    chat_ids = []
     for project_conf in project_confs:
         if isinstance(project_conf, EmailConfInDb):
             emails.append(project_conf.email)
+        elif isinstance(project_conf, TelegramConfInDb):
+            chat_ids.append(project_conf.chat_id)
 
     await send_emails(emails, message)
+    await send_telegram(chat_ids, message)
 
     return {"message": "success"}

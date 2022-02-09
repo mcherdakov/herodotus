@@ -1,5 +1,3 @@
-from webbrowser import get
-import asyncpg
 from fastapi import APIRouter, Depends
 
 from app.auth.api import get_current_user

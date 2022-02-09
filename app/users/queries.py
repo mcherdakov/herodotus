@@ -1,7 +1,6 @@
 import asyncpg
-from app.projects.models import Project
 
-from app.users.models import UserInDB, User
+from app.users.models import UserInDB
 
 
 async def insert_user(conn: asyncpg.Connection, user: UserInDB):

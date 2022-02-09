@@ -16,6 +16,7 @@ python-dotenv = "*"
 httpx = "*"
 pydantic = {extras = ["email"], version = "*"}
 fastapi-mail = "*"
+aiogram = "*"
 
 [dev-packages]
 black = "*"

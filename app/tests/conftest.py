@@ -4,10 +4,10 @@ import asyncpg
 import pytest
 from httpx import AsyncClient
 
-from app.db import Database, get_db_connection
 from app.auth.api import pwd_context
-from app.users.models import User, UserIn
+from app.db import Database, get_db_connection
 from app.main import create_app
+from app.users.models import User, UserIn
 
 
 async def clean_db(conn: asyncpg.Connection):

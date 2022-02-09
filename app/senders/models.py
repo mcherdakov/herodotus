@@ -1,7 +1,6 @@
 from uuid import UUID
-from pydantic import BaseModel, EmailStr
 
-from app.projects.models import Project
+from pydantic import BaseModel, EmailStr
 
 
 class EmailConfBase(BaseModel):
@@ -13,6 +12,18 @@ class EmailConfIn(EmailConfBase):
 
 
 class EmailConfInDb(EmailConfIn):
+    uuid: UUID
+
+
+class TelegramConfBase(BaseModel):
+    chat_id: int
+
+
+class TelegramConfIn(TelegramConfBase):
+    project_uuid: UUID
+
+
+class TelegramConfInDb(TelegramConfIn):
     uuid: UUID
 
 
